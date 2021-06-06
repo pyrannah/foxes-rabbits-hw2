@@ -1,8 +1,8 @@
-package io.muic.ooc.fab.view;
+package io.muic.ssc.hw2.view;
 
 
-import io.muic.ooc.fab.Field;
-import io.muic.ooc.fab.FieldStats;
+import io.muic.ssc.hw2.Field;
+import io.muic.ssc.hw2.FieldStats;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +10,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+//import io.muic.ooc.fab.Updater;
 
 public class SimulatorView extends JFrame {
 
@@ -21,6 +23,12 @@ public class SimulatorView extends JFrame {
 
     private final String STEP_PREFIX = "Step: ";
     private final String POPULATION_PREFIX = "Population: ";
+
+    //Add
+    private final String PopulationWithSpecific ="All Population";
+
+//    private Updater updater;
+    //
     private JLabel stepLabel, population;
     private FieldView fieldView;
 
@@ -39,7 +47,7 @@ public class SimulatorView extends JFrame {
         stats = new FieldStats();
         colors = new LinkedHashMap<>();
 
-        setTitle("Fox and Rabbit Simulation");
+        setTitle("Fox and Rabbit Simulation HOLA");
         stepLabel = new JLabel(STEP_PREFIX, JLabel.CENTER);
         population = new JLabel(POPULATION_PREFIX, JLabel.CENTER);
 
@@ -117,6 +125,7 @@ public class SimulatorView extends JFrame {
      * @param field The field whose status is to be displayed.
      */
     public void showStatus(int step, Field field) {
+
         if (!isVisible()) {
             setVisible(true);
         }
@@ -140,6 +149,7 @@ public class SimulatorView extends JFrame {
         stats.countFinished();
 
         population.setText(POPULATION_PREFIX + stats.getPopulationDetails(field));
+
         fieldView.repaint();
     }
 
@@ -232,4 +242,5 @@ public class SimulatorView extends JFrame {
             }
         }
     }
+
 }

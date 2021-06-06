@@ -1,6 +1,8 @@
-package io.muic.ooc.fab;
+package io.muic.ssc.hw2;
 
-import io.muic.ooc.fab.view.SimulatorView;
+import io.muic.ssc.hw2.Observer.Observerable;
+import io.muic.ssc.hw2.Observer.SimulatorViewChange;
+import io.muic.ssc.hw2.view.SimulatorView;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,18 +11,14 @@ import java.util.List;
 import java.util.Random;
 
 
-
-public class Simulator {
+public class Simulator extends Observerable {
 
     // Constants representing configuration information for the simulation.
     // The default width for the grid.
     private static final int DEFAULT_WIDTH = 120;
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 80;
-    // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
-    // The probability that a rabbit will be created in any given position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;
+
 
     // The probability that a rabbit will be created in any given position.
     // Lists of animals in the field.
@@ -32,22 +30,14 @@ public class Simulator {
     private int step;
     // A graphical view of the simulation.
     private SimulatorView view;
-    // Random generator
     private static final Random RANDOM = new Random();
 
-    /**
-     * Construct a simulation field with default size.
-     */
+
     public Simulator() {
+
         this(DEFAULT_DEPTH, DEFAULT_WIDTH);
     }
 
-    /**
-     * Create a simulation field with the given size.
-     *
-     * @param depth Depth of the field. Must be greater than zero.
-     * @param width Width of the field. Must be greater than zero.
-     */
     public Simulator(int depth, int width) {
         if (width <= 0 || depth <= 0) {
             System.out.println("The dimensions must be >= zero.");
@@ -57,32 +47,35 @@ public class Simulator {
         }
 
         animals = new ArrayList<>();
-
         field = new Field(depth, width);
 
-        // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
-        view.setColor(Rabbit.class, Color.ORANGE);
-        view.setColor(Fox.class, Color.BLUE);
+
+//        AnimalType[] animalTypes = AnimalType.values();
+        view.setColor(Rabbit.class, Color.yellow);
+        view.setColor(Fox.class, Color.green);
+        view.setColor(Tiger.class, Color.red);
+        view.setColor(Hunter.class, Color.BLUE);
+
+        SimulatorViewChange start = new SimulatorViewChange(view);
+        addObserver2(start);
+
+
+
+
+
 
         // Setup a valid starting point.
         reset();
     }
 
-    /**
-     * Run the simulation from its current state for a reasonably long period
-     * (4000 steps).
-     */
+
     public void runLongSimulation() {
+
         simulate(4000);
+
     }
 
-    /**
-     * Run the simulation for the given number of steps. Stop before the given
-     * number of steps if it ceases to be viable.
-     *
-     * @param numSteps The number of steps to run for.
-     */
     public void simulate(int numSteps) {
         for (int step = 1; step <= numSteps && view.isViable(field); step++) {
             simulateOneStep();
@@ -90,17 +83,14 @@ public class Simulator {
         }
     }
 
-    /**
-     * Run the simulation from its current state for a single step. Iterate over
-     * the whole field updating the state of each fox and rabbit.
-     */
+
     public void simulateOneStep() {
         step++;
 
         // Provide space for newborn animals.
         List<Animal> newAnimals = new ArrayList<>();
         // Let all animal act
-        for (Iterator<Animal> it = animals.iterator(); it.hasNext();) {
+        for (Iterator<Animal> it = animals.iterator(); it.hasNext(); ) {
             Animal animal = it.next();
             animal.act(newAnimals);
             if (!animal.isAlive()) {
@@ -123,32 +113,13 @@ public class Simulator {
         animals.clear();
 
         populate();
-
         // Show the starting state in the view.
         view.showStatus(step, field);
+
+
+
     }
 
-    /**
-     * Randomly populate the field with foxes and rabbits.
-     */
-    private void populate() {
-        
-        field.clear();
-        for (int row = 0; row < field.getDepth(); row++) {
-            for (int col = 0; col < field.getWidth(); col++) {
-                if (RANDOM.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Fox fox = new Fox(true, field, location);
-                    animals.add(fox);
-                } else if (RANDOM.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Rabbit rabbit = new Rabbit(true, field, location);
-                    animals.add(rabbit);
-                }
-                // else leave the location empty.
-            }
-        }
-    }
 
     /**
      * Pause for a given time.
@@ -162,4 +133,17 @@ public class Simulator {
             // wake up
         }
     }
+
+    private void populate() {
+        FieldPopulator a = new FieldPopulator();
+        a.populate(field,animals);
+
+
+
+    }
+
 }
+
+
+
+

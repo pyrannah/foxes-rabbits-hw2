@@ -1,9 +1,7 @@
-package io.muic.ooc.fab;
+package io.muic.ssc.hw2;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 
 public class Field {
 
@@ -44,6 +42,7 @@ public class Field {
      * @param location The location to clear.
      */
     public void clear(Location location) {
+
         field[location.getRow()][location.getCol()] = null;
     }
 

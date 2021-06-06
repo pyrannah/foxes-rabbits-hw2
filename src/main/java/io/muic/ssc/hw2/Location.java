@@ -1,4 +1,4 @@
-package io.muic.ooc.fab;
+package io.muic.ssc.hw2;
 
 public class Location {
 

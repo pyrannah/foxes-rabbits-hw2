@@ -1,11 +1,12 @@
-package io.muic.ooc.fab;
+package io.muic.ssc.hw2;
 
 import java.util.HashMap;
+
 
 public class FieldStats {
 
     // Counters for each type of entity (fox, rabbit, etc.) in the simulation.
-    private HashMap<Class, Counter> counters;
+    private  HashMap<Class, Counter> counters;
     // Whether the counters are currently up to date.
     private boolean countsValid;
 
@@ -38,6 +39,7 @@ public class FieldStats {
             buffer.append(' ');
         }
         return buffer.toString();
+
     }
 
     /**
@@ -114,4 +116,5 @@ public class FieldStats {
         }
         countsValid = true;
     }
+
 }
